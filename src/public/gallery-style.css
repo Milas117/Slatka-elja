@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F9E9F3; 
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.gallery-title {
+    text-align: center;
+    color: rgb(151, 58, 94); 
+    margin-bottom: 20px;
+}
+
+.gallery-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gallery-table th, .gallery-table td {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.gallery-table th {
+    background-color: #f2f2f2;
+}
+
+.image-style {
+    width: 100px;
+    height: auto;
+    border-radius: 5px; 
+}
+.gallery-table tr {
+    cursor: pointer;
+}
+.logout-container {
+    text-align: center; 
+    margin-top: 20px; 
+}
+
+.logout-container button {
+    background-color: #350ec0; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+}
+
+.logout-container button:hover {
+    background-color: #040a61; 
+}
+#detailsModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 10;
+    width: 50%; 
+    border-radius: 8px;
+    display: none; 
+    margin-top: 120px;
+}
+
+#detailsModal h2 {
+    color: rgb(151, 58, 94);
+    text-align: center;
+}
+
+#detailsModal p {
+    margin: 10px 0; 
+}
+
+#orderDetails {
+    text-align: center; 
+    margin-bottom: 20px; 
+}
+
+#detailsModal button {
+    display: block;
+    margin: 20px auto; 
+    padding: 10px 20px;
+    background-color: #350ec0;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#detailsModal button:hover {
+    background-color: #040a61;
+}
+
+#orderStatus {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-success {
+    background-color: #28a745; 
+}
+
+.btn-success:hover {
+    background-color: #218838; 
+}
+.modal-footer {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    flex-direction: row;     
+    width: 100%;            
+    padding: 10px;           
+}
+.modal-footer button {
+    margin: 0 auto; 
+}
+
+
+

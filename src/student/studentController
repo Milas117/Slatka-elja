@@ -1,0 +1,51 @@
+var studentService = require('./studentService');
+var studentModel = require('./studentModel');
+
+
+var createStudentControllerFn = async (req, res) => {
+  try {
+    console.log("Zahtjev za registracijom primljen:", req.body);
+    console.log('Tip lozinke:', typeof req.body.lozinka);
+
+    const existingStudent = await studentService.checkUsernameExists(req.body.korisnickoime);
+    if (existingStudent) {
+      return res.json({ status: false, message: 'Korisničko ime već postoji. Molimo odaberite drugo.' });
+    }
+
+    var result = await studentService.createStudentDBService(req.body);
+    console.log(result);
+
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.json({ status: false, message: 'Greška prilikom registracije. Molimo pokušajte ponovno.' });
+  }
+}
+
+var loginStudentControllerFn = async (req, res) => {
+  try {
+      const { korisnickoime, lozinka } = req.body;
+      const student = await studentModel.findOne({ korisnickoime: korisnickoime });
+      
+if (student && student.lozinka === lozinka) {
+  req.session.korisnik = {
+      _id: student._id,
+      korisnickoime: student.korisnickoime,
+      uloga: student.uloga
+  };
+
+  let redirectUrl = student.uloga === 'admin' ? '/gallery.html' : '/Index.html';
+  return res.json({ status: true, redirect: redirectUrl }); 
+} else {
+  return res.status(401).json({ status: false, message: 'Neuspješna prijava. Provjerite korisničko ime i lozinku.' });
+}
+
+  } catch (err) {
+      console.log(err);
+      return res.status(500).json({ status: false, message: 'Greška prilikom prijave. Molimo pokušajte ponovno.' });
+  }
+}
+
+
+module.exports = { createStudentControllerFn, loginStudentControllerFn };
+

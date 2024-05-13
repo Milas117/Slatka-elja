@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Registracija</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./Torte.css">
+  
+</head>
+<body>
+  <div class="header">
+    <img class="image" src="./images/slatkaželja.jpg" alt="Trulli" width="200" height="125"> 
+    <img class="image" src="./images/byzeljka.png" alt="Trulli" width="80" height="25"> 
+  </div>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="./Index.html">Slatka Želja</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="./Torte.html">Torte</a></li>
+      <li><a href="./Kolači.html">Kolači</a></li>
+    </ul>
+    
+    <ul class="nav navbar-nav navbar-right" id="navLinks">
+      <li id="myOrdersLink" style="display: none;"><a href="./MyOrders.html"><span class="glyphicon glyphicon-list-alt"></span> Moje narudžbe</a></li>
+      <li id="korisnikPlaceholder" style="display: none;">
+          <a href="#"><span class="glyphicon glyphicon-user"></span> <span id="usernamePlaceholder"></span></a>
+      </li>
+      <li id="logoutPlaceholder" style="display: none;"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+      <li><a href="./Registracija.html"><span class="glyphicon glyphicon-user"></span> Registracija</a></li>
+      <li><a href="./Prijava.html"><span class="glyphicon glyphicon-log-in"></span> Prijava</a></li> 
+  </ul>
+  </div>
+</nav>
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userDetailsModalLabel">Korisnički Podaci</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="userDetailsForm">
+          <div class="form-group">
+            <label for="username">Korisničko Ime</label>
+            <input type="text" class="form-control" id="username" disabled>
+          </div>
+          <div class="form-group">
+            <label for="firstName">Ime</label>
+            <input type="text" class="form-control" id="firstName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Prezime</label>
+            <input type="text" class="form-control" id="lastName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="oldPassword">Stara Lozinka</label>
+            <input type="password" class="form-control" id="oldPassword">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Nova Lozinka</label>
+            <input type="password" class="form-control" id="newPassword">
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" onclick="updateUserDetails()">Spremi Promjene</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="image-container">
+  <img src="./Images/Torta2.jpeg" alt="Opis slike 1">
+  <button  class="image-button" id="openImageFormBtn">Pošalji sliku svoje torte</button>
+</div>
+<div class="image-container">
+  <img src="./Images/Torta.jpg" alt="Opis slike 2">
+  <button class="image-button" id="myBtn">Otvori formu za personaliziranu tortu</button>
+</div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+<div class="forms-wrapper">
+<form id="mojaforma">
+<div class="container1">
+  <h1>ODABERI SASTOJKE I KRERIRAJ SVOJU TORTU!</h1>
+  <label for="shape">Odaberi oblik torte:</label>
+  <select id="shape" onchange="updateCakeShape()">
+    <option value="" disabled selected>Odaberite oblik</option>
+      <option value="Okrugla">Okrugla</option>
+      <option value="Pravokutna">Pravokutna</option>
+  </select>
+
+  <label for="size">Odaberi veličinu torte:</label>
+<select id="size" onchange="updateCakeSize()">
+  <option value="" disabled selected>Odaberite veličinu</option>
+    <option value="Mala">Mala</option>
+    <option value="Srednja">Srednja</option>
+    <option value="Velika">Velika</option>
+</select>
+
+  <label for="color">Odaberi boju torte:</label>
+  <input type="color" id="color" name="color" value="#ffffff" onchange="updateCakeColor()">
+  
+  <div id="preview">
+      <svg width="300" height="300" viewBox="0 0 300 300">
+        <circle id="OkruglaCake" cx="150" cy="150" r="100" fill="#ffb8de" style="display:none;"></circle>
+        <rect id="PravokutnaCake" x="50" y="50" width="200" height="200" fill="#ffb8de" style="display:none;"></rect>
+      </svg>
+      <label for="biscuit">Odaberi biskvit torte:</label>
+<select id="biscuit">
+  <option value="" disabled selected>Odaberite biskvit</option>
+    <option value="Jaja">Biskvit od jaja</option>
+    <option value="Badem">Biskvit od badema</option>
+    <option value="Orah">Biskvit od oraha</option>
+</select>
+
+<label for="cream">Odaberi kremu:</label>
+<select id="cream">
+  <option value="" disabled selected>Odaberi kremu</option>
+    <option value="nutella">Krema Nutella</option>
+    <option value="Pehar">Krema Pehar</option>
+    <option value="Jogurtica">Krema Jogurtica</option>
+    <option value="Šlag">Šlag</option>
+</select>
+
+<label for="kat">Odaberi broj katova torte:</label>
+<select id="kat">
+  <option value="" disabled selected>Odaberi broj katova</option>
+    <option value="JedanKat">1 kat</option>
+    <option value="DvaKata">2 kata</option>
+    <option value="Trikata">3 kata</option>
+</select>
+
+<label for="birthday">Torta za rođendan:</label>
+<input type="checkbox" id="birthday" name="birthday" onchange="toggleBirthdayOptions()">
+<div id="birthdayOptions" style="display: none;">
+    <label for="age">Broj svjećica:</label>
+    <input type="number" id="age" name="age" min="1">
+    <button type="button" onclick="addCandles()" style="padding: 1px 1px; margin-left: 10px; display: inline-block; vertical-align: top; width: auto;">Dodaj</button>
+</div>
+
+<p id="totalPrice" style="font-family: 'Caveat', cursive; font-size: 200%;">Ukupna cijena: 0 EUR</p>
+<label for="pickupDate">Datum preuzimanja:</label>
+<input type="date" id="pickupDate" name="pickupDate" required>
+
+
+
+<button onclick="submitSelection()">Potvrdi odabir</button>
+  </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script src="script.js"></script> 
+
+<div id="imageFormModal" class="modal">
+  <div class="modal-content">
+    <span class="closeImageForm">&times;</span>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <h1>POŠALJI NAM SLIKU KAKO ŽELIŠ DA TVOJA TORTA IZGLEDA!</h1>
+      <div>
+        <label for="image">Choose Image:</label>
+        <input type="file" name="image" id="image" required>
+      </div>
+      <div>
+        <label for="comment">Napiši sve što trebamo znati o torti</label>
+        <textarea name="comment" id="comment" rows="4" cols="50"></textarea>
+      </div>
+      <button type="submit">Upload</button>
+      <div>
+        <label for="pickupDate">Datum preuzimanja:</label>
+        <input type="date" id="pickupDate" name="pickupDate" required>
+    </div>
+    
+    </form>
+  </div>
+</div>
+
+
+</body>
+<script>
+  $(document).ready(function() {
+      $.get('/session-status', function(data) {
+          if (data.loggedIn) {
+              $('#myOrdersLink').show(); 
+              $('#korisnikPlaceholder').show().find('#usernamePlaceholder').text(data.korisnik);
+              $('#logoutPlaceholder').show();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().hide();
+          } else {
+              $('#myOrdersLink').hide(); 
+              $('#korisnikPlaceholder').hide();
+              $('#logoutPlaceholder').hide();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().show();
+          }
+      });
+  });
+  
+    </script>
+
+  <script>
+
+var modal = document.getElementById('myModal');
+
+var btn = document.getElementById("myBtn");
+
+var span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+  </script>
+
+  <script>
+    var imageFormModal = document.getElementById('imageFormModal');
+var openImageFormBtn = document.getElementById('openImageFormBtn');
+var closeImageFormBtn = document.getElementsByClassName('closeImageForm')[0];
+
+openImageFormBtn.onclick = function() {
+    imageFormModal.style.display = "block";
+}
+
+closeImageFormBtn.onclick = function() {
+    imageFormModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == imageFormModal) {
+        imageFormModal.style.display = "none";
+    }
+}
+
+$(document).ready(function() {
+    $('.closeImageForm').click(function() {
+        $('#imageFormModal').hide();
+    });
+
+    $(window).click(function(event) {
+        if (event.target === $('#imageFormModal')[0]) {
+            $('#imageFormModal').hide();
+        }
+    });
+});
+  </script>
+
+      <script>
+$('#imageFormModal form').on('submit', function(e) {
+    e.preventDefault();
+    if ($(this).data('isSubmitting')) {
+        return;
+    }
+    $(this).data('isSubmitting', true);
+
+    var formData = new FormData(this);
+    formData.append('pickupDate', $('#pickupDate').val());
+
+    $.ajax({
+        url: '/upload',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            alert('Slika uspješno uploadana!');
+        },
+        error: function(xhr) {
+            alert('Došlo je do greške: ' + xhr.responseJSON.message);
+        },
+        complete: function() {
+            $('#imageFormModal').hide();
+            $('#imageFormModal form')[0].reset();
+            $('#imageFormModal form').data('isSubmitting', false);
+        }
+    });
+});
+
+
+$('#korisnikPlaceholder').on('click', function() {
+  $.get('/get-user-details', function(data) {
+    $('#username').val(data.korisnickoime);
+    $('#firstName').val(data.ime);
+    $('#lastName').val(data.prezime);
+    $('#userDetailsModal').modal('show');
+  });
+});
+
+function updateUserDetails() {
+  var userDetails = {
+    oldPassword: $('#oldPassword').val(),
+    newPassword: $('#newPassword').val()
+  };
+
+  $.ajax({
+    url: '/update-user-password',
+    method: 'POST',
+    data: userDetails,
+    success: function(response) {
+      alert('Lozinka je ažurirana!');
+      $('#userDetailsModal').modal('hide');
+    },
+    error: function(error) {
+      alert('Došlo je do greške pri promjeni lozinke.');
+    }
+  });
+}
+
+      </script>
+</html>

@@ -1,0 +1,157 @@
+body {
+  background-color: #ffffff;
+}
+li{
+   font-size: 175%;
+}
+
+.header {
+   display: flex;
+   justify-content: center;;
+   align-items: flex-end;
+   background-color: #ffffff;
+   color: #fff;
+   padding: 20px;
+}
+
+.image {
+   max-width: 100px; 
+   height: auto; 
+}
+
+.navbar-brand{
+   font-family: 'Caveat', cursive;
+   color: rgb(0, 0, 0);
+   font-size: 175%;
+}
+p{
+  font-family: 'Caveat', cursive;
+   color: rgb(0, 0, 0);
+   font-size: 125%;
+   display: flex;
+   justify-content: center;;
+}
+.navbar-brand{
+ font-family: 'Caveat', cursive;
+ color: rgb(0, 0, 0);
+}
+.navbar{
+   margin-top: 2,5%;
+   background-color: rgb(255, 255, 255);
+   border-color: #ffffff;
+   
+}
+
+.navbar-inverse .navbar-nav > li > a {
+ color: #000000; 
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+ color: #ff00c8; 
+ background-color: transparent; 
+}
+
+.navbar-inverse .navbar-brand {
+ color: #000000; 
+}
+
+.navbar-inverse .navbar-brand:hover {
+ color: #ff00c8; 
+}
+.navbar-brand, .navbar-nav > li > a {
+ font-family: 'Caveat', cursive !important;
+}
+
+ * {
+    box-sizing: borderbox;
+  }
+
+  .container {
+    padding: 16px;
+    background-color: white;
+    font-family: 'Caveat', cursive;
+   color: rgb(0, 0, 0);
+   font-size: 105%;
+    
+  }
+  
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+  hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+  
+  .registerbtn {
+    background-color: #ff00c8;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
+  
+  .registerbtn:hover {
+    opacity: 1;
+  }
+  
+  a {
+    color: dodgerblue;
+  }
+  
+  .signin {
+    background-color: #f1f1f1;
+    text-align: center;
+  }
+ 
+  p{
+    font-size: large;
+  }
+ 
+  .message-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    width: 300px; 
+    height: auto;
+    border-radius: 10px; 
+    font-size: 18px;
+  }
+  
+  body .error-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #ca0a0a;
+    color: white !important;
+    text-align: center;
+    z-index: 1;
+    width: 300px; 
+    height: auto;
+    border-radius: 10px; 
+    font-size: 18px;
+  }

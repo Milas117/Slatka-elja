@@ -1,0 +1,146 @@
+body {
+  background-color: #ffffff;
+}
+li{
+   font-size: 175%;
+}
+
+.header {
+   display: flex;
+   justify-content: center;;
+   align-items: flex-end;
+   background-color: #ffffff;
+   color: #fff;
+   padding: 10px;
+}
+
+.image {
+   max-width: 100px; 
+   height: auto; 
+}
+
+.navbar-brand{
+   font-family: 'Caveat', cursive;
+   color: rgb(0, 0, 0);
+   font-size: 175%;
+}
+.navbar-brand{
+ font-family: 'Caveat', cursive;
+ color: rgb(0, 0, 0);
+}
+.navbar{
+   margin-top: 2,5%;
+   background-color: rgb(255, 255, 255);
+   border-color: #ffffff;
+   
+}
+
+.navbar-inverse .navbar-nav > li > a {
+ color: #000000;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+ color: #ff00c8; 
+ background-color: transparent; 
+}
+
+.navbar-inverse .navbar-brand {
+ color: #000000; 
+}
+
+.navbar-inverse .navbar-brand:hover {
+ color: #ff00c8; 
+}
+.navbar-brand, .navbar-nav > li > a {
+ font-family: 'Caveat', cursive !important;
+}
+
+ * {
+    box-sizing: borderbox;
+  }
+  
+  .container {
+    padding: 16px;
+    background-color: white;
+    font-family: 'Caveat', cursive;
+   color: rgb(0, 0, 0);
+   font-size: 105%;
+  }
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color:#ff00c8;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

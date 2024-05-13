@@ -1,0 +1,23 @@
+var express = require('express');
+
+function isAuthenticated(req, res, next) {
+    if (req.session && req.session.korisnik) {
+        next();
+    } else {
+        res.status(401).send('Morate biti prijavljeni da biste izvršili ovu akciju.');
+    }
+}
+var studentController = require('../src/student/studentController'); 
+const customCakeController = require('../src/student/customCakeController');
+const cake2Controller = require('../src/student/customCake2Controller');
+
+const router = express.Router();
+
+router.route('/student/login').post(studentController.loginStudentControllerFn);
+router.route('/student/create').post(studentController.createStudentControllerFn); 
+
+router.post('/custom-cake/create', isAuthenticated, customCakeController.createCustomCake);
+router.post('/create-Tray',isAuthenticated, cake2Controller.createCustomCake2);
+router.get('/check-date-availability',isAuthenticated, customCakeController.checkDateAvailability);
+
+module.exports = router;

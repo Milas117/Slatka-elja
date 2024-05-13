@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Registracija</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>¸
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <link rel="stylesheet"  href="./Home.css">
+
+</head>
+<body>
+  <div class="header">
+    <img class="image" src="./images/slatkaželja.jpg" alt="Trulli" width="200" height="125"> 
+    <img class="image" src="./images/byzeljka.png" alt="Trulli" width="80" height="25"> 
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./Index.html">Slatka Želja</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="./Torte.html">Torte</a></li>
+        <li><a href="./Kolači.html">Kolači</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" id="navLinks">
+        <li id="myOrdersLink" style="display: none;"><a href="./MyOrders.html"><span class="glyphicon glyphicon-list-alt"></span> Moje narudžbe</a></li>
+        <li id="korisnikPlaceholder" style="display: none;">
+            <a href="#"><span class="glyphicon glyphicon-user"></span> <span id="usernamePlaceholder"></span></a>
+        </li>
+        <li id="logoutPlaceholder" style="display: none;"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+        <li><a href="./Registracija.html"><span class="glyphicon glyphicon-user"></span> Registracija</a></li>
+        <li><a href="./Prijava.html"><span class="glyphicon glyphicon-log-in"></span> Prijava</a></li> 
+    </ul>
+    </div>
+  </nav>
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userDetailsModalLabel">Korisnički Podaci</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="userDetailsForm">
+          <div class="form-group">
+            <label for="username">Korisničko Ime</label>
+            <input type="text" class="form-control" id="username" disabled>
+          </div>
+          <div class="form-group">
+            <label for="firstName">Ime</label>
+            <input type="text" class="form-control" id="firstName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Prezime</label>
+            <input type="text" class="form-control" id="lastName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="oldPassword">Stara Lozinka</label>
+            <input type="password" class="form-control" id="oldPassword">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Nova Lozinka</label>
+            <input type="password" class="form-control" id="newPassword">
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" onclick="updateUserDetails()">Spremi Promjene</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div id="auto-slideshow" class="slideshow-container">
+    <div class="mySlidesAuto fade">
+      <a href="link_do_prve_stranice.html">
+        <img src="./images/Slika1.jpg" style="width:100%">
+      </a>
+    </div>
+  
+    <div class="mySlidesAuto fade">
+      <a href="link_do_druge_stranice.html">
+        <img src="./images/Slika2.jpg" style="width:100%">
+      </a>
+    </div>
+  
+    <div class="mySlidesAuto fade">
+      <a href="link_do_treće_stranice.html">
+        <img src="./images/Slika3.jpg" style="width:100%">
+      </a>
+    </div>
+    <div class="mySlidesAuto fade">
+      <a href="link_do_treće_stranice.html">
+        <img src="./images/Slika4.jpg" style="width:100%">
+      </a>
+    </div>
+    <div class="mySlidesAuto fade">
+      <a href="link_do_treće_stranice.html">
+        <img src="./images/Slika5.jpg" style="width:100%">
+      </a>
+    </div>
+  
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </div>
+    <section class="page-section" id="services">
+      <div class="container">
+          <div class="row text-center">
+              <div class="col-md-4">
+                  <div class="service-item">
+                    <a href="/Torte.html">
+                      <img src="./Images/Icona2.jpg" class="img-fluid" alt="Torta 1"> </a>
+                      <h4 class="my-3">Personalizirane Torte</h4>
+                      <p class="text-muted">Naruči svoju personaliziranu tortu i iznenadi svoje najmilije!</p>       
+                  </div>
+              </div>
+              <div class="col-md-4">
+                <div class="service-item">
+                  <a href="/Torte.html">
+                    <img src="./Images/Icona1.jpg" class="img-fluid" alt="Torta 2" ></a>
+                    <h4 class="my-3">Pošalji fotku torte</h4>
+                    <p class="text-muted">Kakvu god tortu zaželite mi pravimo!</p>            
+                </div>
+            </div>
+              <div class="col-md-4">
+                  <div class="service-item">
+                    <a href="/Kolači.html">
+                      <img src="./Images/Icona3.jpg" class="img-fluid" alt="Torta 2"> </a>
+                      <h4 class="my-3">Naručivanje Kolača</h4>
+                      <p class="text-muted">Imamo širok izbor kolača za sve prigode. Naruči svoj omiljeni kolač danas!</p> 
+                  </div>
+              </div>
+        
+          </div>
+      </div>
+  </section>
+  <div  id="slideshow" class="gallery-container">
+    <div class="gallery-grid">
+      <img src="./images/1.jpg" alt="Opis slike 1" onclick="openModal();currentSlide(1)">
+      <img src="./images/2.jpg" alt="Opis slike 2" onclick="openModal();currentSlide(2)">
+      <img src="./images/3.jpg" alt="Opis slike 3" onclick="openModal();currentSlide(3)">
+      <img src="./images/4.jpg" alt="Opis slike 4" onclick="openModal();currentSlide(4)">
+      <img src="./images/5.jpg" alt="Opis slike 5" onclick="openModal();currentSlide(5)">
+      <img src="./images/6.jpg" alt="Opis slike 6" onclick="openModal();currentSlide(6)">
+    </div>
+    <div id="myModal" class="modal">
+      <span class="close cursor" onclick="closeModal()">&times;</span>
+      <div class="modal-content">
+  
+        <div class="mySlides">
+          <img src="./images/1.jpg" style="width:100%">
+        </div>
+  
+        <div class="mySlides">
+          <img src="./images/2.jpg" style="width:100%">
+        </div>
+  
+        <div class="mySlides">
+          <img src="./images/3.jpg" style="width:100%">
+        </div>
+  
+        <div class="mySlides">
+          <img src="./images/4.jpg" style="width:100%">
+        </div>
+  
+        <div class="mySlides">
+          <img src="./images/5.jpg" style="width:100%">
+        </div>
+  
+        <div class="mySlides">
+          <img src="./images/6.jpg" style="width:100%">
+        </div>
+  
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+    </div>
+  </div>
+   
+  <div class="social-icons">
+    <a href="https://www.facebook.com/p/Slatka-%C5%BDelja-100063583868326/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://www.instagram.com/slatka_zelja/" target="_blank"><i class="fab fa-instagram"></i></a>
+</div>
+
+</body>
+<script>
+function openModal() {
+  document.getElementById('myModal').style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById('myModal').style.display = "none";
+}
+
+var slideIndex = 1;
+showLightboxSlides(slideIndex);
+
+function plusSlides(n) {
+  showLightboxSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showLightboxSlides(slideIndex = n);
+}
+
+function showLightboxSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slides[slideIndex-1].style.display = "block";
+}
+var slideIndexAuto = 0;
+autoSlides();
+
+function autoSlides() {
+  var slides = document.getElementsByClassName("mySlidesAuto");
+  if (slides.length === 0) return; 
+
+  for (var i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndexAuto++;
+  if (slideIndexAuto > slides.length) {slideIndexAuto = 1}
+  slides[slideIndexAuto-1].style.display = "block";
+  setTimeout(autoSlides, 4000); 
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  autoSlides();
+});
+</script>
+<script>
+$(document).ready(function() {
+    $.get('/session-status', function(data) {
+        if (data.loggedIn) {
+            $('#myOrdersLink').show(); 
+            $('#korisnikPlaceholder').show().find('#usernamePlaceholder').text(data.korisnik);
+            $('#logoutPlaceholder').show();
+            $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().hide();
+        } else {
+            $('#myOrdersLink').hide(); 
+            $('#korisnikPlaceholder').hide();
+            $('#logoutPlaceholder').hide();
+            $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().show();
+        }
+    });
+});
+
+$('#korisnikPlaceholder').on('click', function() {
+  $.get('/get-user-details', function(data) {
+    $('#username').val(data.korisnickoime);
+    $('#firstName').val(data.ime);
+    $('#lastName').val(data.prezime);
+    $('#userDetailsModal').modal('show');
+  });
+});
+
+function updateUserDetails() {
+  var userDetails = {
+    oldPassword: $('#oldPassword').val(),
+    newPassword: $('#newPassword').val()
+  };
+
+  $.ajax({
+    url: '/update-user-password',
+    method: 'POST',
+    data: userDetails,
+    success: function(response) {
+      alert('Lozinka je ažurirana!');
+      $('#userDetailsModal').modal('hide');
+    },
+    error: function(error) {
+      alert('Došlo je do greške pri promjeni lozinke.');
+    }
+  });
+}
+
+  </script>
+  
+  
+</html>

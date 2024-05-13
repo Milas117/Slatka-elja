@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Registracija</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./Kolači.css">
+</head>
+<body>
+  <div class="header">
+    <img class="image" src="./images/slatkaželja.jpg" alt="Trulli" width="200" height="125"> 
+    <img class="image" src="./images/byzeljka.png" alt="Trulli" width="80" height="25"> 
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./Index.html">Slatka Želja</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="./Torte.html">Torte</a></li>
+        <li><a href="./Kolači.html">Kolači</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" id="navLinks">
+        <li id="myOrdersLink" style="display: none;"><a href="./MyOrders.html"><span class="glyphicon glyphicon-list-alt"></span> Moje narudžbe</a></li>
+        <li id="korisnikPlaceholder" style="display: none;">
+            <a href="#"><span class="glyphicon glyphicon-user"></span> <span id="usernamePlaceholder"></span></a>
+        </li>
+        <li id="logoutPlaceholder" style="display: none;"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+        <li><a href="./Registracija.html"><span class="glyphicon glyphicon-user"></span> Registracija</a></li>
+        <li><a href="./Prijava.html"><span class="glyphicon glyphicon-log-in"></span> Prijava</a></li> 
+    </ul>
+    <h1>Popunite tacnu s kolačima po želji</h1>
+    </div>
+</nav>
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userDetailsModalLabel">Korisnički Podaci</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="userDetailsForm">
+          <div class="form-group">
+            <label for="username">Korisničko Ime</label>
+            <input type="text" class="form-control" id="username" disabled>
+          </div>
+          <div class="form-group">
+            <label for="firstName">Ime</label>
+            <input type="text" class="form-control" id="firstName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="lastName">Prezime</label>
+            <input type="text" class="form-control" id="lastName" readonly>
+          </div>
+          <div class="form-group">
+            <label for="oldPassword">Stara Lozinka</label>
+            <input type="password" class="form-control" id="oldPassword">
+          </div>
+          <div class="form-group">
+            <label for="newPassword">Nova Lozinka</label>
+            <input type="password" class="form-control" id="newPassword">
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" onclick="updateUserDetails()">Spremi Promjene</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="padding: 20px;">
+  <input type="checkbox" id="multi-select-mode">
+  <label for="multi-select-mode" style="font-family: 'Caveat', cursive;color: rgb(0, 0, 0);font-size: 105%;" >Višestruki odabir</label>
+</div>
+
+
+<div id="tray" class="tray"></div>
+<div id="popup" class="popup" style="display:none;">
+  <span class="close">&times;</span> 
+  <form id="cakeForm">
+      <input type="hidden" id="current-slot">
+      <label for="cakeType">Odaberite kolač:</label>
+      <select id="cakeType" onchange="updateCaloriesInfo()">
+          <option value="mađarica">Mađarica</option>
+          <option value="ruskakapa">Ruska kapa</option>
+          <option value="bijelapita">Bijela pita</option>
+          <option value="lidija">Lidija</option>
+          <option value="monte">Monte</option>
+          <option value="breskvice">Breskvice</option>
+          <option value="čupavci">Čupavci</option>
+      </select>
+      <div id="calories-info">Ukupan broj kalorija: 0</div>
+      <button type="submit">Dodaj na tacnu</button>
+      <button id="delete-button" style="display:none;">Obriši kolač</button>
+  </form>
+</div>
+</div>
+<div id="order-summary">
+  <div id="order-controls" style="text-align: center; margin-top: 20px;">
+    <button id="toggle-order-details">Prikaži detalje narudžbe</button>
+    <div id="order-details" style="display: none; margin-top: 10px;">
+        <h3>Ukupna cijena: <span id="total-price">0 EUR</span></h3>
+        <p>Ukupan broj kalorija: <span id="total-calories-info">0</span></p>
+        <button id="order-button">Naruči kolače</button>
+    </div>
+  </div>
+</div>
+
+ 
+</div>
+<div id="trayModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Unesite broj tacni koje želite naručiti</h2>
+    <input type="number" id="tray-count" value="1" min="1">
+    <button onclick="confirmOrder()">Potvrdi narudžbu</button>
+    <label for="pickupDate">Datum preuzimanja:</label>
+<input type="date" id="pickupDate" name="pickupDate" required>
+
+
+  </div>
+ 
+</div>
+
+
+
+
+
+
+<script src="cakeOrder.js"></script>
+
+</body>
+<script>
+   $(document).ready(function() {
+      $.get('/session-status', function(data) {
+          if (data.loggedIn) {
+              $('#myOrdersLink').show(); 
+              $('#korisnikPlaceholder').show().find('#usernamePlaceholder').text(data.korisnik);
+              $('#logoutPlaceholder').show();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().hide();
+          } else {
+              $('#myOrdersLink').hide(); 
+              $('#korisnikPlaceholder').hide();
+              $('#logoutPlaceholder').hide();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().show();
+          }
+      });
+ 
+  
+      document.getElementById('toggle-order-details').addEventListener('click', function() {
+    var orderDetails = document.getElementById('order-details');
+    var toggleButton = document.getElementById('toggle-order-details');
+
+    if (orderDetails.style.display === 'none') {
+        orderDetails.style.display = 'block';
+        toggleButton.textContent = 'Sakrij detalje narudžbe';
+    } else {
+        orderDetails.style.display = 'none';
+        toggleButton.textContent = 'Prikaži detalje narudžbe';
+    }
+});    
+
+      window.addEventListener('click', function(event) {
+          const popup = document.getElementById('popup');
+          const trayModal = document.getElementById('trayModal');
+          if (event.target === popup || event.target === trayModal) {
+              popup.style.display = 'none';
+              trayModal.style.display = 'none';
+          }
+      });
+  });
+  
+   document.querySelectorAll('.close').forEach(closeButton => {
+          closeButton.addEventListener('click', function() {
+              this.closest('.modal').style.display = 'none';
+              
+          });
+      });
+      document.querySelectorAll('.close').forEach(closeButton => {
+          closeButton.addEventListener('click', function() {
+              this.closest('.popup').style.display = 'none';
+              
+          });
+      });
+
+
+      $('#korisnikPlaceholder').on('click', function() {
+  $.get('/get-user-details', function(data) {
+    $('#username').val(data.korisnickoime);
+    $('#firstName').val(data.ime);
+    $('#lastName').val(data.prezime);
+    $('#userDetailsModal').modal('show');
+  });
+});
+
+function updateUserDetails() {
+  var userDetails = {
+    oldPassword: $('#oldPassword').val(),
+    newPassword: $('#newPassword').val()
+  };
+
+  $.ajax({
+    url: '/update-user-password',
+    method: 'POST',
+    data: userDetails,
+    success: function(response) {
+      alert('Lozinka je ažurirana!');
+      $('#userDetailsModal').modal('hide');
+    },
+    error: function(error) {
+      alert('Došlo je do greške pri promjeni lozinke.');
+    }
+  });
+}
+  </script>
+</html>

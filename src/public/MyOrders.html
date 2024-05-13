@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje narudžbe</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./MyOrders.css"> 
+</head>
+<body>
+
+    <div class="header">
+        <img class="image" src="./images/slatkaželja.jpg" alt="Trulli" width="200" height="125"> 
+        <img class="image" src="./images/byzeljka.png" alt="Trulli" width="80" height="25"> 
+      </div>
+    
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="./Index.html">Slatka Želja</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="./Torte.html">Torte</a></li>
+            <li><a href="./Kolači.html">Kolači</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right" id="navLinks">
+            <li id="myOrdersLink" style="display: none;"><a href="./MyOrders.html"><span class="glyphicon glyphicon-list-alt"></span> Moje narudžbe</a></li>
+            <li id="korisnikPlaceholder" style="display: none;">
+                <a href="#"><span class="glyphicon glyphicon-user"></span> <span id="usernamePlaceholder"></span></a>
+            </li>
+            <li id="logoutPlaceholder" style="display: none;"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+            <li><a href="./Registracija.html"><span class="glyphicon glyphicon-user"></span> Registracija</a></li>
+            <li><a href="./Prijava.html"><span class="glyphicon glyphicon-log-in"></span> Prijava</a></li> 
+        </ul>
+
+        <div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="userDetailsModalLabel">Korisnički Podaci</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="userDetailsForm">
+                    <div class="form-group">
+                      <label for="username">Korisničko Ime</label>
+                      <input type="text" class="form-control" id="username" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label for="firstName">Ime</label>
+                      <input type="text" class="form-control" id="firstName" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="lastName">Prezime</label>
+                      <input type="text" class="form-control" id="lastName" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="oldPassword">Stara Lozinka</label>
+                      <input type="password" class="form-control" id="oldPassword">
+                    </div>
+                    <div class="form-group">
+                      <label for="newPassword">Nova Lozinka</label>
+                      <input type="password" class="form-control" id="newPassword">
+                    </div>
+                  </form>
+                </div>
+                
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+                  <button type="button" class="btn btn-primary" onclick="updateUserDetails()">Spremi Promjene</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        <div class="container">
+            <h1>Moje narudžbe</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Broj narudžbe</th>
+                        <th>Detalji</th>
+                        <th>Datum kreiranja narudžbe</th>
+                        <th>Datum preuzimanja narudžbe</th>
+                        <th>Status narudžbe</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersBody">
+                </tbody>
+            </table>
+           
+
+
+        </div>
+        
+        
+        <div id="detailsModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Detalji narudžbe</h4>
+                    </div>
+                    <div class="modal-body" id="orderDetails">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    <script>
+     $(document).ready(function() {
+            fetchOrders();
+        });
+
+function fetchOrders() {
+    fetch('/my-orders', { credentials: 'include' })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        return response.json();
+    })
+    .then(orders => {
+        const ordersBody = document.getElementById('ordersBody');
+        ordersBody.innerHTML = '';
+        let orderNumber = 1;
+
+        orders.forEach(order => {
+            const row = ordersBody.insertRow();
+            row.insertCell(0).textContent = orderNumber++;
+            const detailsButton = document.createElement('button');
+            detailsButton.className = 'btn btn-info';
+            detailsButton.textContent = 'Prikaži detalje';
+            detailsButton.dataset.order = JSON.stringify(order);
+            detailsButton.onclick = function() { showDetails(this.dataset.order); };
+            row.insertCell(1).appendChild(detailsButton);
+            row.insertCell(2).textContent = order.datumKreiranja || 'Nema datuma';
+            row.insertCell(3).textContent = order.datumPreuzimanja || 'Nema datuma';
+            row.insertCell(4).textContent = order.status;
+        });
+    })
+    .catch(err => {
+        console.error('Error loading orders:', err);
+        alert('Greška pri učitavanju narudžbi.');
+    });
+}
+
+
+function showDetails(orderData) {
+    const item = JSON.parse(orderData);
+    const modal = $('#detailsModal');
+    const details = document.getElementById('orderDetails');
+    details.innerHTML = `<p>Tip: ${item.tip}</p>`;
+
+    if (item.tip === 'Torte') {
+        const detaljiParts = item.detalji.split(', ');
+        detaljiParts.forEach(part => {
+            if (!part.startsWith("Boja:")) {
+                details.innerHTML += `<p>${part}</p>`;
+            }
+        });
+
+        const colorMatch = item.detalji.match(/Boja: (#\w+)/);
+        const color = colorMatch ? colorMatch[1] : '#FFFFFF';
+        details.innerHTML += `<p>Boja: <span style="display: inline-block; width: 30px; height: 30px; background-color: ${color}; border: 1px solid #000;"></span> ${color}</p>`;
+
+        const priceMatch = item.detalji.match(/Cijena: €(\d+\.\d+)/);
+        const price = priceMatch ? priceMatch[1] : 'Nije dostupno';
+        details.innerHTML += `<p>Ukupna cijena: €${price}</p>`;
+    } else if (item.tip === 'Kolači') {
+        details.innerHTML += `<p>Broj tacni: ${item.brojTacni}</p>`;
+        item.kolači.forEach(kolac => {
+            const parts = kolac.match(/Vrsta kolača: (.+), Broj: (\d+), Cijena po komadu: €(\d+\.\d+)/);
+            if (parts) {
+                details.innerHTML += `<p>Vrsta kolača: ${parts[1]}, Broj: ${parts[2]}, Cijena po komadu: ${parts[3]}</p>`;
+            }
+        });
+        details.innerHTML += `<p>Ukupna cijena: €${item.ukupnaCijena}</p>`;
+    } else if (item.tip === 'Slike') {
+        details.innerHTML = `<img src="${item.imagePath}" style="max-width: 100%; max-height: 400px; cursor: pointer;" onclick="window.open('${item.imagePath}', '_blank')">`;
+        details.innerHTML += `<p>Komentari: ${item.comments}</p>`;
+    }
+
+    modal.modal('show');
+}
+
+
+    </script>
+    <script>
+        $(document).ready(function() {
+            $.get('/session-status', function(data) {
+                if (data.loggedIn) {
+                    $('#myOrdersLink').show(); 
+                    $('#korisnikPlaceholder').show().find('#usernamePlaceholder').text(data.korisnik);
+                    $('#logoutPlaceholder').show();
+                    $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().hide();
+                } else {
+                    $('#myOrdersLink').hide(); 
+                    $('#korisnikPlaceholder').hide();
+                    $('#logoutPlaceholder').hide();
+                    $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().show();
+                }
+            });
+        });
+        
+         </script>
+         <script>
+            $('#korisnikPlaceholder').on('click', function() {
+  $.get('/get-user-details', function(data) {
+    $('#username').val(data.korisnickoime);
+    $('#firstName').val(data.ime);
+    $('#lastName').val(data.prezime);
+    $('#userDetailsModal').modal('show');
+  });
+});
+
+function updateUserDetails() {
+  var userDetails = {
+    oldPassword: $('#oldPassword').val(),
+    newPassword: $('#newPassword').val()
+  };
+
+  $.ajax({
+    url: '/update-user-password',
+    method: 'POST',
+    data: userDetails,
+    success: function(response) {
+      alert('Lozinka je ažurirana!');
+      $('#userDetailsModal').modal('hide');
+    },
+    error: function(error) {
+      alert('Došlo je do greške pri promjeni lozinke.');
+    }
+  });
+}
+         </script>
+ 
+</body>
+</html>

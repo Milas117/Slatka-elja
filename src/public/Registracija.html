@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Registracija</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet"  href="./Regstracija.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+</head>
+<body>
+  <div class="header" id="header">
+    <img class="image" src="./images/slatkaželja.jpg" alt="Trulli" width="200" height="125"> 
+    <img class="image" src="./images/byzeljka.png" alt="Trulli" width="80" height="25"> 
+  </div>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./Index.html">Slatka Želja</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a href="./Torte.html">Torte</a></li>
+        <li><a href="./Kolači.html">Kolači</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" id="navLinks">
+        <li id="korisnikPlaceholder" style="display: none;">
+            <a href="#"><span class="glyphicon glyphicon-user"></span> <span id="usernamePlaceholder"></span></a>
+        </li>
+        <li id="logoutPlaceholder" style="display: none;"><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Odjava</a></li>
+        <li><a href="./Registracija.html"><span class="glyphicon glyphicon-user"></span> Registracija</a></li>
+        <li><a href="./Prijava.html"><span class="glyphicon glyphicon-log-in"></span> Prijava</a></li> 
+    </ul>
+    
+    </div>
+
+<form id="registrationForm" action="http://localhost:3000/student/create" method="post" referrerpolicy="no-referrer-when-downgrade">
+  <div class="container">
+    <p><b>Popunite polja kako biste se registrirali</b></p>
+    <hr>
+    <label for="ime"><b>Ime</b></label>
+    <input type="text" placeholder="Unesite ime" name="ime" id="ime" required>
+
+    <label for="prezime"><b>Prezime</b></label>
+    <input type="text" placeholder="Unesite prezime" name="prezime" id="prezime" required>
+
+    <label for="korisnickoime"><b>Korisničko ime</b></label>
+    <input type="text" placeholder="Unesite korisničko ime" name="korisnickoime" id="korisnickoime" required>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Unesite email" name="email" id="email" required>
+
+    <label for="lozinka"><b>Lozinka</b></label>
+    <input type="password" placeholder="Unesite lozinku" name="lozinka" id="lozinka" required>
+  
+    <label for="lozinkaPotvrda"><b>Potvrdi lozinku</b></label>
+    <input type="password" placeholder="Potvrdi lozinku" name="lozinkaPotvrda" id="lozinkaPotvrda" required>
+
+
+    <hr>
+
+    <button type="submit" class="registerbtn">Registriraj</button>
+  </div>
+
+  <div class="container signin">
+    <p>Već imaš račun? <a href="Prijava.html">Prijavi se</a>.</p>
+  </div>
+</form>
+
+
+
+<div id="success-message" style="display: none;" class="message-container">
+  <p>Uspješno ste se registrirali!</p>
+</div>
+
+<div id="error-message" style="display: none; color: red;" class="message-container">
+  <p></p>
+</div>
+
+<script>
+function showMessage(message, success = true) {
+  var messageContainer = document.getElementById(success ? 'success-message' : 'error-message');
+  messageContainer.innerHTML = message;
+  messageContainer.style.display = 'block';
+  
+  if (!success) {
+    messageContainer.classList.add('error-message');
+  }
+
+  setTimeout(function() {
+    messageContainer.style.display = 'none';
+    messageContainer.classList.remove('error-message'); 
+    if (success) {
+      clearInputFields();  
+    }
+  }, 3000);
+}
+
+function clearInputFields() {
+  $('#ime, #prezime, #korisnickoime, #email, #lozinka, #lozinkaPotvrda').val('');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var registrationForm = document.getElementById('registrationForm');
+  registrationForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var formData = new FormData(registrationForm);
+    var email = formData.get('email');
+    var lozinka = formData.get('lozinka');
+    var lozinkaPotvrda = formData.get('lozinkaPotvrda');
+
+    if (!email.includes('@')) {
+      showMessage('Molimo unesite ispravnu email adresu!', false);
+      return;
+    }
+    if (lozinka !== lozinkaPotvrda) {
+      showMessage('Lozinke se ne podudaraju. Molimo unesite iste lozinke.', false);
+      return;
+    }
+
+    fetch('http://localhost:3000/student/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(formData)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      showMessage(data.message, data.status);
+    })
+    .catch(error => {
+      showMessage('Došlo je do greške prilikom registracije. Molimo pokušajte ponovno.', false);
+    });
+  });
+});
+</script>
+</body>
+<script>
+  $(document).ready(function() {
+      $.get('/session-status', function(data) {
+          if (data.loggedIn) {
+              $('#myOrdersLink').show(); 
+              $('#korisnikPlaceholder').show().find('#usernamePlaceholder').text(data.korisnik);
+              $('#logoutPlaceholder').show();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().hide();
+          } else {
+              $('#myOrdersLink').hide(); 
+              $('#korisnikPlaceholder').hide();
+              $('#logoutPlaceholder').hide();
+              $('li a[href="./Registracija.html"], li a[href="./Prijava.html"]').parent().show();
+          }
+      });
+  });
+  
+    </script>
+
+
+</html>

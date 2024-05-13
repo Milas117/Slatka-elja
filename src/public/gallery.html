@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Galerija narudžbi</title>
+    <link rel="stylesheet" href="gallery-style.css">
+</head>
+<body>
+    <div class="lightbox-background" onclick="closeLightbox()">
+        <div class="lightbox-content">
+            <img src="" id="lightbox-image">
+        </div>
+    </div>
+    
+<div class="container">
+    <h1 class="gallery-title">Narudžbe</h1>
+    <table class="gallery-table">
+        <thead>
+            <tr>
+                <th>Naručitelj</th>
+                <th>Detalji narudžbe</th>
+                <th>Status</th>
+                <th>Zakazani datum</th>
+                <th>Akcije</th>
+
+
+            </tr>
+        </thead>
+        <tbody id="orderTable">
+        </tbody>
+    </table>
+    
+<div class="logout-container">
+    <button onclick="logout()">Odjava</button>
+</div>
+</div>
+
+<div id="detailsModal" style="display:none;">
+    <h2>Detalji narudžbe</h2>
+    <div id="orderDetails"></div>
+    <div class="modal-footer">
+        <select id="orderStatus">
+            <option value="Prihvaćeno">Prihvati narudžbu</option>
+            <option value="Odbijeno">Odbij narudžbu</option>
+        </select>
+        <button type="button" class="btn btn-success" id="updateStatusButton">Pošalji</button>
+        <button onclick="closeModal()">Zatvori</button>
+    </div>
+</div>
+
+<script>
+function fetchAndDisplayOrders() {
+    fetch('/gallery', { credentials: 'include' })
+    .then(response => response.json())
+    .then(data => {
+        const table = document.getElementById('orderTable');
+        table.innerHTML = '';
+        data.forEach(item => {
+            const row = table.insertRow();
+            const nameCell = row.insertCell(0);
+            const detailsCell = row.insertCell(1);
+            const statusCell = row.insertCell(2);
+            const actionCell = row.insertCell(3);
+            const dateCell = row.insertCell(3);
+
+            nameCell.textContent = item.orderedByUsername;
+            detailsCell.textContent = 'Prikaži detalje';
+            detailsCell.style.cursor = 'pointer';
+            detailsCell.onclick = () => showDetails(item); 
+            statusCell.textContent = item.status || 'Na čekanju';
+            dateCell.textContent = item.datumPreuzimanja|| 'Na čekanju';
+            actionCell.innerHTML = `<button onclick="deleteOrder('${item._id}', event)">Obriši</button>`;
+        });
+    })
+    .catch(err => console.error('Error fetching gallery data:', err));
+}
+
+
+function deleteOrder(id, event) {
+    event.stopPropagation();  
+    fetch(`/mark-order-as-deleted/${id}`, { method: 'POST' })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to mark the order as deleted');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        fetchAndDisplayOrders();  
+    })
+    .catch(err => {
+        console.error('Error marking order as deleted:', err);
+        alert('Error marking order as deleted: ' + err.message);
+    });
+}
+
+
+
+
+
+function showDetails(item) {
+    const modal = document.getElementById('detailsModal');
+    const details = document.getElementById('orderDetails');
+    const updateButton = document.getElementById('updateStatusButton');
+    details.innerHTML = `<p>Tip: ${item.tip}</p>`;
+
+    updateButton.onclick = function() {
+        updateOrderStatus(item._id);  
+    }
+
+    if (item.tip === 'Torte') {
+        const detaljiParts = item.detalji.split(', ');
+        detaljiParts.forEach(part => {
+            if (!part.startsWith("Boja:")) {
+                details.innerHTML += `<p>${part}</p>`;
+            }
+        });
+        const colorMatch = item.detalji.match(/Boja: (#\w+)/);
+        const color = colorMatch ? colorMatch[1] : '#FFFFFF'; 
+        details.innerHTML += `<p>Boja: <span style="display: inline-block; width: 30px; height: 30px; background-color: ${color}; border: 1px solid #000;"></span> ${color}</p>`;
+
+        const priceMatch = item.detalji.match(/Cijena: €(\d+\.\d+)/);
+        const price = priceMatch ? priceMatch[1] : 'Nije dostupno';
+        details.innerHTML += `<p>Ukupna cijena: €${price}</p>`;
+    } else if (item.tip === 'Kolači') {
+        details.innerHTML += `<p>Broj tacni: ${item.brojTacni}</p>`;
+        item.kolači.forEach(kolac => {
+            const parts = kolac.match(/Vrsta kolača: (.+), Broj: (\d+), Cijena po komadu: €(\d+\.\d+)/);
+            if (parts) {
+                details.innerHTML += `<p>Vrsta kolača: ${parts[1]}, Broj: ${parts[2]}, Cijena po komadu: €${parts[3]}</p>`;
+            }
+        });
+        details.innerHTML += `<p>Ukupna cijena: €${item.ukupnaCijena}</p>`;
+    } else if (item.tip === 'Slike') {
+        details.innerHTML += `<img src="${item.imagePath}" style="width: 500px; cursor: pointer;" ('${item.imagePath}')">`;
+
+        details.innerHTML += `<p>Komentari: ${item.comments}</p>`;
+    }
+
+    modal.style.display = 'block';
+}
+
+function updateOrderStatus(orderId) {
+    const status = document.getElementById('orderStatus').value;
+
+    fetch('/update-order-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ orderId, status })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to update order status');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        closeModal();
+        fetchAndDisplayOrders();
+    })
+    .catch(err => {
+        console.error('Error updating order status:', err);
+        alert('Error updating order status: ' + err.message);
+    });
+}
+
+
+
+
+    function closeModal() {
+        document.getElementById('detailsModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAndDisplayOrders);
+
+    function logout() {
+    fetch('/logout', {
+        method: 'POST' 
+    })
+    .then(() => {
+        window.location.href = '/Prijava.html';  
+    })
+    .catch(err => {
+        console.error('Failed to logout:', err);
+    });
+}
+
+
+function showImageInLightbox(imagePath) {
+    const lightboxImage = document.getElementById('lightbox-image');
+    lightboxImage.src = imagePath;
+    document.querySelector('.lightbox-background').style.display = 'flex';
+}
+
+function closeLightbox() {
+    document.querySelector('.lightbox-background').style.display = 'none';
+}
+
+
+</script>
+
+</body>
+</html>

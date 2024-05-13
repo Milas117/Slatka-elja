@@ -1,0 +1,66 @@
+var studentModel = require('./studentModel');
+var session = require('express-session');
+
+module.exports.checkUsernameExists = async (korisnickoime) => {
+  try {
+    const existingStudent = await studentModel.findOne({ korisnickoime: korisnickoime });
+    return existingStudent !== null;
+  } catch (error) {
+    console.error('Error checking username:', error);
+    return false;
+  }
+};
+
+module.exports.createStudentDBService = async (studentDetails) => {
+  console.log('Received request:', studentDetails);
+  console.log('Form data:', studentDetails);
+
+  const usernameExists = await module.exports.checkUsernameExists(studentDetails.korisnickoime);
+
+  if (usernameExists) {
+    return { status: false, message: 'Korisničko ime već postoji. Molimo odaberite drugo korisničko ime.' };
+  }
+
+  try {
+    console.log('Inside createStudentDBService');
+
+    var studentModelData = new studentModel();
+
+    studentModelData.ime = studentDetails.ime;
+    studentModelData.prezime = studentDetails.prezime;
+    studentModelData.korisnickoime = studentDetails.korisnickoime;
+    studentModelData.email = studentDetails.email;
+    studentModelData.lozinka = studentDetails.lozinka;
+
+    const result = await studentModelData.save();
+    console.log('User saved successfully:', result);
+    return { status: true, message: 'Uspješno ste se registrirali!' };
+  } catch (error) {
+    console.error('Error saving to database:', error);
+    return { status: false, message: 'Registracija nije uspjela. Molimo pokušajte ponovno.' };
+  }
+};
+
+module.exports.loginStudentDBService = async (loginDetails) => {
+  try {
+    console.log('Received login request:', loginDetails);
+
+    const korisnickoime = loginDetails.korisnickoime;
+    const lozinka = loginDetails.lozinka;
+
+    const student = await studentModel.findOne({ korisnickoime: korisnickoime });
+    console.log('Tražim studenta u bazi za korisnickoime:', korisnickoime);
+    console.log('Unesena lozinka:', lozinka);
+
+    if (student && student.lozinka === lozinka) {
+      console.log('Uspješna prijava!');
+      return { status: true, message: 'Uspješna prijava!' };
+    } else {
+      console.log('Neuspješna prijava. Provjerite korisničko ime i lozinku.');
+      return { status: false, message: 'Neuspješna prijava. Provjerite korisničko ime i lozinku.' };
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    return { status: false, message: 'Greška prilikom prijave. Molimo pokušajte ponovno.' };
+  }
+};
